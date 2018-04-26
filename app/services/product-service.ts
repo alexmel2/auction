@@ -1,13 +1,16 @@
+import {Injectable} from '@angular/core';
+
 export class Product {
   constructor(
-    public id: number,
-    public title: string,
-    public price: number,
-    public rating: number,
-    public description: string,
-    public categories: Array<string>) {
+      public id: number,
+      public title: string,
+      public price: number,
+      public rating: number,
+      public description: string,
+      public categories: string[]) {
   }
 }
+
 export class Review {
   constructor(
       public id: number,
@@ -19,24 +22,22 @@ export class Review {
   }
 }
 
+@Injectable()
 export class ProductService {
-  getProducts(): Array<Product> {
+  getProducts(): Product[] {
     return products.map(p => new Product(p.id, p.title, p.price, p.rating, p.description, p.categories));
   }
-   productById(productId:number):Product
-  {
-  return products.filter(p => p.id === productId)[0];
 
-  }
-  getReviewsForProduct(poriductId:number):Review[]
-  {
-  return reviews.filter(r=> r.productId===poriductId).map(r=> new  Review(r.id,r.productId, new Date(r.timestamp),r.user,r.rating,r.comment));
-
-
+  getProductById(productId: number): Product {
+    return products.filter(p => p.id === productId)[0];
   }
 
+  getReviewsForProduct(productId: number): Review[] {
+    return reviews
+        .filter(r => r.productId === productId)
+        .map(r => new Review(r.id, r.productId, new Date(r.timestamp), r.user, r.rating, r.comment));
+  }
 }
-
 
 var products = [
   {
@@ -132,7 +133,7 @@ var reviews = [
   },
   {
     "id": 5,
-    "productId": 1,
+    "productId": 0,
     "timestamp": "2014-05-20T11:42:00+00:00",
     "user": "User 6",
     "rating": 5,
